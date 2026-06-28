@@ -15,9 +15,9 @@ cd homework1
 
 ```bash
 git checkout -b homework-1
+# пишем код
 make test-unit
 make test-integration
-# пишем код
 make check
 git status
 git add .

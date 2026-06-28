@@ -9,6 +9,7 @@ import (
 	"github.com/rinat-course/homework1/internal/homework"
 )
 
+// demoInput хранит все входные данные для запуска демонстрационной программы.
 type demoInput struct {
 	name              string
 	age               int
@@ -20,6 +21,12 @@ type demoInput struct {
 	homeworkCompleted bool
 }
 
+const maxArgs = 8
+
+// main — точка входа в программу.
+//
+// Программа берёт аргументы из командной строки.
+// Если аргументы не переданы, используются значения по умолчанию.
 func main() {
 	input, err := parseInput(os.Args[1:])
 	if err != nil {
@@ -31,16 +38,21 @@ func main() {
 	printResult(os.Stdout, input)
 }
 
+// parseInput преобразует аргументы командной строки в структуру demoInput.
+//
+// Например:
+// ./main Алексей 17 250 4 8 16 true false
+//
+// Если часть аргументов не передана, недостающие значения остаются дефолтными.
 func parseInput(args []string) (demoInput, error) {
 	input := defaultInput()
-	parsers := inputParsers(&input)
 
-	if len(args) > len(parsers) {
-		return demoInput{}, fmt.Errorf("too many arguments: got %d, max %d", len(args), len(parsers))
+	if len(args) > maxArgs {
+		return demoInput{}, fmt.Errorf("too many arguments: got %d, max %d", len(args), maxArgs)
 	}
 
-	for index, arg := range args {
-		if err := parsers[index](arg); err != nil {
+	for index, value := range args {
+		if err := applyArgument(&input, index, value); err != nil {
 			return demoInput{}, fmt.Errorf("argument %d: %w", index+1, err)
 		}
 	}
@@ -48,6 +60,9 @@ func parseInput(args []string) (demoInput, error) {
 	return input, nil
 }
 
+// defaultInput возвращает входные данные по умолчанию.
+//
+// Эти значения используются, если пользователь запустил программу без аргументов.
 func defaultInput() demoInput {
 	return demoInput{
 		name:              "Мария",
@@ -61,29 +76,35 @@ func defaultInput() demoInput {
 	}
 }
 
-func inputParsers(input *demoInput) []func(string) error {
-	return []func(string) error{
-		func(value string) error {
-			input.name = value
-			return nil
-		},
-		func(value string) error { return parseInt(value, &input.age, "age") },
-		func(value string) error { return parseInt(value, &input.price, "price") },
-		func(value string) error { return parseInt(value, &input.count, "count") },
-		func(value string) error {
-			return parseInt(value, &input.completedLessons, "completedLessons")
-		},
-		func(value string) error { return parseInt(value, &input.totalLessons, "totalLessons") },
-		func(value string) error {
-			return parseBool(value, &input.goCoreCompleted, "goCoreCompleted")
-		},
-		func(value string) error {
-			return parseBool(value, &input.homeworkCompleted, "homeworkDone")
-		},
+// applyArgument записывает один аргумент командной строки в нужное поле input.
+//
+// Номер аргумента определяет, какое именно поле нужно заполнить.
+func applyArgument(input *demoInput, index int, value string) error {
+	switch index {
+	case 0:
+		input.name = value
+		return nil
+	case 1:
+		return setInt(value, &input.age, "age")
+	case 2:
+		return setInt(value, &input.price, "price")
+	case 3:
+		return setInt(value, &input.count, "count")
+	case 4:
+		return setInt(value, &input.completedLessons, "completedLessons")
+	case 5:
+		return setInt(value, &input.totalLessons, "totalLessons")
+	case 6:
+		return setBool(value, &input.goCoreCompleted, "goCoreCompleted")
+	case 7:
+		return setBool(value, &input.homeworkCompleted, "homeworkDone")
+	default:
+		return fmt.Errorf("unknown argument index: %d", index)
 	}
 }
 
-func parseInt(value string, target *int, name string) error {
+// setInt преобразует строку в int и записывает результат в нужное поле.
+func setInt(value string, target *int, name string) error {
 	parsed, err := strconv.Atoi(value)
 	if err != nil {
 		return fmt.Errorf("%s must be integer", name)
@@ -93,7 +114,10 @@ func parseInt(value string, target *int, name string) error {
 	return nil
 }
 
-func parseBool(value string, target *bool, name string) error {
+// setBool преобразует строку в bool и записывает результат в нужное поле.
+//
+// Подходящие значения: true, false, 1, 0, t, f.
+func setBool(value string, target *bool, name string) error {
 	parsed, err := strconv.ParseBool(value)
 	if err != nil {
 		return fmt.Errorf("%s must be boolean", name)
@@ -103,6 +127,7 @@ func parseBool(value string, target *bool, name string) error {
 	return nil
 }
 
+// printResult вызывает функции из домашнего задания и печатает результат.
 func printResult(writer io.Writer, input demoInput) {
 	fmt.Fprintln(writer, homework.BuildGreeting(input.name))
 	fmt.Fprintln(writer, homework.IsAdult(input.age))
@@ -111,6 +136,7 @@ func printResult(writer io.Writer, input demoInput) {
 	fmt.Fprintln(writer, homework.CanStartBackendBlock(input.goCoreCompleted, input.homeworkCompleted))
 }
 
+// printUsage печатает подсказку, как правильно запускать программу.
 func printUsage(writer io.Writer) {
 	fmt.Fprintln(writer, "Usage:")
 	fmt.Fprintln(writer, "  main [name age price count completedLessons totalLessons goCoreCompleted homeworkDone]")
