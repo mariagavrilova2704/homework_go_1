@@ -6,6 +6,21 @@
 internal/homework/homework.go
 ```
 
+В этой домашке тренируем только темы первого урока:
+
+- `package`;
+- `import`;
+- `func`;
+- `return`;
+- строки;
+- библиотеку `fmt`;
+- запуск тестов;
+- отправку Pull Request.
+
+Здесь специально нет `int`, `bool`, `if`, циклов и сложной логики. Они появятся в следующих уроках.
+
+---
+
 ## Задача 1. BuildGreeting
 
 ### Сигнатура
@@ -18,16 +33,10 @@ func BuildGreeting(name string) string
 
 Функция принимает имя ученика и возвращает приветствие.
 
-### Вход
+### Формат результата
 
 ```text
-name = "Мария"
-```
-
-### Выход
-
-```text
-"Привет, Мария! Добро пожаловать в Go."
+"Привет, {name}! Добро пожаловать в Go."
 ```
 
 ### Примеры
@@ -39,211 +48,149 @@ name = "Мария"
 
 ---
 
-## Задача 2. IsAdult
+## Задача 2. BuildCourseWelcome
 
 ### Сигнатура
 
 ```go
-func IsAdult(age int) bool
+func BuildCourseWelcome(courseName string) string
 ```
 
 ### Что должна делать функция
 
-Функция принимает возраст и возвращает:
+Функция принимает название курса и возвращает строку с названием курса.
 
-- `true`, если возраст 18 или больше;
-- `false`, если возраст меньше 18.
+### Формат результата
+
+```text
+"Курс: {courseName}"
+```
 
 ### Примеры
 
 | Вход | Выход |
 |---|---|
-| `17` | `false` |
-| `18` | `true` |
-| `26` | `true` |
+| `"Go backend"` | `"Курс: Go backend"` |
+| `"Основы Go"` | `"Курс: Основы Go"` |
 
 ---
 
-## Задача 3. CalculateTotal
+## Задача 3. BuildLessonTitle
 
 ### Сигнатура
 
 ```go
-func CalculateTotal(price int, count int) int
+func BuildLessonTitle(lessonName string) string
 ```
 
 ### Что должна делать функция
 
-Функция принимает цену одного товара и количество товаров, затем возвращает итоговую сумму.
+Функция принимает название темы и возвращает название урока.
+
+### Формат результата
+
+```text
+"Урок 1: {lessonName}"
+```
 
 ### Примеры
 
 | Вход | Выход |
 |---|---|
-| `price = 100`, `count = 3` | `300` |
-| `price = 250`, `count = 2` | `500` |
-| `price = 0`, `count = 5` | `0` |
+| `"терминал, Git и первый Go-проект"` | `"Урок 1: терминал, Git и первый Go-проект"` |
+| `"package, import и fmt"` | `"Урок 1: package, import и fmt"` |
 
 ---
 
-## Задача 4. FormatCourseProgress
+## Задача 4. BuildRepositoryPath
 
 ### Сигнатура
 
 ```go
-func FormatCourseProgress(completedLessons int, totalLessons int) string
+func BuildRepositoryPath(owner string, repo string) string
 ```
 
 ### Что должна делать функция
 
-Функция принимает количество пройденных уроков и общее количество уроков, затем возвращает строку в формате:
+Функция принимает владельца репозитория и название репозитория, затем возвращает путь до репозитория на GitHub.
+
+### Формат результата
 
 ```text
-"Пройдено X из Y уроков"
+"github.com/{owner}/{repo}"
 ```
-
-### Пример
-
-```text
-completedLessons = 3
-totalLessons = 12
-```
-
-### Выход
-
-```text
-"Пройдено 3 из 12 уроков"
-```
-
----
-
-## Задача 5. CanStartBackendBlock
-
-### Сигнатура
-
-```go
-func CanStartBackendBlock(goCoreCompleted bool, homeworkDone bool) bool
-```
-
-### Что должна делать функция
-
-Функция возвращает `true`, только если выполнены оба условия:
-
-1. Go Core пройден.
-2. Домашняя работа сделана.
-
-Во всех остальных случаях нужно вернуть `false`.
 
 ### Примеры
 
-| `goCoreCompleted` | `homeworkDone` | Выход |
-|---|---|---|
-| `true` | `true` | `true` |
-| `true` | `false` | `false` |
-| `false` | `true` | `false` |
-| `false` | `false` | `false` |
+| Вход | Выход |
+|---|---|
+| `owner = "rinat-course"`, `repo = "homework1"` | `"github.com/rinat-course/homework1"` |
+| `owner = "student"`, `repo = "go-homework"` | `"github.com/student/go-homework"` |
 
+---
 
-## Запуск программы с внешними входными данными
+## Задача 5. BuildRunCommand
 
-Программа в `cmd/demo` должна работать в двух режимах.
+### Сигнатура
 
-### Режим 1. Без аргументов
-
-```bash
-./bin/main
+```go
+func BuildRunCommand(packagePath string) string
 ```
 
-В этом режиме используются дефолтные значения из примера:
+### Что должна делать функция
+
+Функция принимает путь до Go-пакета и возвращает команду запуска программы.
+
+### Формат результата
 
 ```text
-Мария 18 100 3 3 12 true true
+"go run {packagePath}"
 ```
 
-### Режим 2. С аргументами
+### Примеры
+
+| Вход | Выход |
+|---|---|
+| `"./cmd/demo"` | `"go run ./cmd/demo"` |
+| `"./cmd/app"` | `"go run ./cmd/app"` |
+
+---
+
+## Как понять, что всё сделано правильно
+
+Запустите:
 
 ```bash
-./bin/main Алексей 17 250 4 8 16 true false
+make test-unit
+make test-integration
+make check
 ```
 
-Порядок аргументов:
+Домашка готова к отправке, если все команды завершились без ошибки.
 
-| Позиция | Значение | Тип | Для какой функции используется |
-|---:|---|---|---|
-| 1 | `name` | `string` | `BuildGreeting` |
-| 2 | `age` | `int` | `IsAdult` |
-| 3 | `price` | `int` | `CalculateTotal` |
-| 4 | `count` | `int` | `CalculateTotal` |
-| 5 | `completedLessons` | `int` | `FormatCourseProgress` |
-| 6 | `totalLessons` | `int` | `FormatCourseProgress` |
-| 7 | `goCoreCompleted` | `bool` | `CanStartBackendBlock` |
-| 8 | `homeworkDone` | `bool` | `CanStartBackendBlock` |
+## Что можно менять
 
-Аргументы можно передавать частично. Если аргумент не передан, используется значение
-по умолчанию. Например:
+Можно менять:
 
-```bash
-./bin/main Ринат 26
+```text
+internal/homework/homework.go
 ```
 
-В этом случае имя и возраст будут взяты из CLI, а остальные значения останутся дефолтными.
+Не нужно менять:
+
+```text
+internal/homework/homework_test.go
+test/integration/demo_test.go
+.github/workflows/ci.yml
+```
 
 ## Критерии проверки
 
 Задание считается выполненным, если:
 
-1. Все тесты проходят.
-2. `make check` не падает.
-3. Pull Request открыт и преподаватель добавлен на review.
-4. Ученик может объяснить каждую функцию своими словами.
-
-## Дополнительная автоматическая проверка
-
-В репозитории есть два уровня тестов.
-
-### Unit-тесты
-
-Запуск:
-
-```bash
-make test-unit
-```
-
-Они проверяют каждую функцию отдельно.
-
-### Integration-тесты
-
-Запуск:
-
-```bash
-make test-integration
-```
-
-Они собирают бинарник из `cmd/demo`, запускают его с разными CLI-аргументами и проверяют итоговый вывод программы.
-Также проверяется невалидный ввод: программа должна завершиться с ошибкой и показать usage.
-Это ближе к тому, как backend-приложения проверяют в рабочих CI/CD пайплайнах.
-
-## Дополнительная автоматическая проверка
-
-В репозитории есть два уровня тестов.
-
-### Unit-тесты
-
-Запуск:
-
-```bash
-make test-unit
-```
-
-Они проверяют каждую функцию отдельно.
-
-### Integration-тесты
-
-Запуск:
-
-```bash
-make test-integration
-```
-
-Они собирают бинарник из `cmd/demo`, запускают его и проверяют итоговый вывод программы.
-Это ближе к тому, как backend-приложения проверяют в рабочих CI/CD пайплайнах.
+1. Все функции возвращают строки в точном ожидаемом формате.
+2. Все тесты проходят.
+3. `make check` не падает.
+4. Pull Request открыт.
+5. CI в Pull Request зелёный.
+6. Ученик может объяснить каждую функцию своими словами.

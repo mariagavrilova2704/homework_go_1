@@ -1,33 +1,46 @@
 package homework
 
 // BuildGreeting возвращает приветствие для ученика.
+//
+// Ожидаемый формат:
 // "Привет, {name}! Добро пожаловать в Go."
 func BuildGreeting(name string) string {
-	// TODO: реализуйте функцию.
+	// TODO: реализуйте функцию через fmt.Sprintf.
 	return ""
 }
 
-// IsAdult проверяет, является ли человек совершеннолетним.
-func IsAdult(age int) bool {
-	// TODO: реализуйте функцию.
-	return false
-}
-
-// CalculateTotal считает итоговую стоимость товаров.
-func CalculateTotal(price int, count int) int {
-	// TODO: реализуйте функцию.
-	return 0
-}
-
-// FormatCourseProgress возвращает строку прогресса по курсу.
-// "Пройдено {completedLessons} из {totalLessons} уроков"
-func FormatCourseProgress(completedLessons int, totalLessons int) string {
-	// TODO: реализуйте функцию.
+// BuildCourseWelcome возвращает название курса.
+//
+// Ожидаемый формат:
+// "Курс: {courseName}"
+func BuildCourseWelcome(courseName string) string {
+	// TODO: реализуйте функцию через fmt.Sprintf.
 	return ""
 }
 
-// CanStartBackendBlock проверяет, можно ли переходить к backend-блоку.
-func CanStartBackendBlock(goCoreCompleted bool, homeworkDone bool) bool {
-	// TODO: реализуйте функцию.
-	return false
+// BuildLessonTitle возвращает название первого урока.
+//
+// Ожидаемый формат:
+// "Урок 1: {lessonName}"
+func BuildLessonTitle(lessonName string) string {
+	// TODO: реализуйте функцию через fmt.Sprintf.
+	return ""
+}
+
+// BuildRepositoryPath возвращает путь до репозитория на GitHub.
+//
+// Ожидаемый формат:
+// "github.com/{owner}/{repo}"
+func BuildRepositoryPath(owner string, repo string) string {
+	// TODO: реализуйте функцию через fmt.Sprintf.
+	return ""
+}
+
+// BuildRunCommand возвращает команду запуска Go-программы.
+//
+// Ожидаемый формат:
+// "go run {packagePath}"
+func BuildRunCommand(packagePath string) string {
+	// TODO: реализуйте функцию через fmt.Sprintf.
+	return ""
 }

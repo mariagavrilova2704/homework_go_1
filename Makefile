@@ -45,7 +45,7 @@ GO_TEST_FLAGS ?= -race -covermode=atomic -coverprofile=$(COVERAGE_FILE)
 help:
 	@echo "Available commands:"
 	@echo "  make run              - run demo application with default input"
-	@echo '  make run ARGS="Алексей 17 250 4 8 16 true false"'
+	@echo '  make run ARGS="Алексей Основы-Go package-и-fmt student homework1 ./cmd/demo"'
 	@echo "  make build            - build demo binary"
 	@echo "  make package          - build tar.gz artifact"
 	@echo "  make deps-check       - download and verify Go modules"

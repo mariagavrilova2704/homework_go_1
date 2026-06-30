@@ -19,10 +19,10 @@ func TestDemoBinaryOutput(t *testing.T) {
 	output := buildAndRunDemo(t)
 	want := strings.Join([]string{
 		"Привет, Мария! Добро пожаловать в Go.",
-		"true",
-		"300",
-		"Пройдено 3 из 12 уроков",
-		"true",
+		"Курс: Go backend",
+		"Урок 1: терминал, Git и первый Go-проект",
+		"github.com/rinat-course/homework1",
+		"go run ./cmd/demo",
 	}, "\n") + "\n"
 
 	if output != want {
@@ -41,49 +41,117 @@ func TestDemoBinaryPrintsFiveLines(t *testing.T) {
 	}
 }
 
-func buildAndRunDemo(t *testing.T) string {
-	t.Helper()
+func TestDemoBinaryCustomArgs(t *testing.T) {
+	t.Parallel()
 
-	binaryPath := buildDemoBinary(t)
-	ctx, cancel := context.WithTimeout(context.Background(), commandTimeout)
-	t.Cleanup(cancel)
+	output := buildAndRunDemo(t,
+		"Алексей",
+		"Основы Go",
+		"package и fmt",
+		"student",
+		"homework1",
+		"./cmd/demo",
+	)
+	want := strings.Join([]string{
+		"Привет, Алексей! Добро пожаловать в Go.",
+		"Курс: Основы Go",
+		"Урок 1: package и fmt",
+		"github.com/student/homework1",
+		"go run ./cmd/demo",
+	}, "\n") + "\n"
 
-	cmd := exec.CommandContext(ctx, binaryPath)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		t.Fatalf("run demo binary: %v\noutput:\n%s", err, output)
+	if output != want {
+		t.Fatalf("demo output with custom args = %q, want %q", output, want)
 	}
-
-	return strings.ReplaceAll(string(output), "\r\n", "\n")
 }
 
-func buildDemoBinary(t *testing.T) string {
+func TestDemoBinaryRejectsTooManyArgs(t *testing.T) {
+	t.Parallel()
+
+	binaryPath := buildDemo(t)
+	ctx, cancel := context.WithTimeout(context.Background(), commandTimeout)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, binaryPath, "1", "2", "3", "4", "5", "6", "7")
+	output, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("demo was expected to fail, output: %q", string(output))
+	}
+
+	text := string(output)
+	if !strings.Contains(text, "too many arguments") {
+		t.Fatalf("demo error output = %q, want 'too many arguments'", text)
+	}
+	if !strings.Contains(text, "Usage:") {
+		t.Fatalf("demo error output = %q, want usage", text)
+	}
+}
+
+func buildAndRunDemo(t *testing.T, args ...string) string {
 	t.Helper()
 
-	repoRoot := repositoryRoot(t)
-	binaryPath := filepath.Join(t.TempDir(), "demo")
+	binaryPath := buildDemo(t)
 	ctx, cancel := context.WithTimeout(context.Background(), commandTimeout)
-	t.Cleanup(cancel)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, binaryPath, args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("run demo binary: %v, output: %s", err, output)
+	}
+
+	return string(output)
+}
+
+func buildDemo(t *testing.T) string {
+	t.Helper()
+
+	repoRoot := findRepoRoot(t)
+	binaryPath := filepath.Join(t.TempDir(), binaryName())
+
+	ctx, cancel := context.WithTimeout(context.Background(), commandTimeout)
+	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "go", "build", "-o", binaryPath, "./cmd/demo")
 	cmd.Dir = repoRoot
-	cmd.Env = os.Environ()
-
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("build demo binary: %v\noutput:\n%s", err, output)
+		t.Fatalf("build demo binary: %v, output: %s", err, output)
 	}
 
 	return binaryPath
 }
 
-func repositoryRoot(t *testing.T) string {
+func findRepoRoot(t *testing.T) string {
 	t.Helper()
 
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("cannot detect current test file path")
+	current, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("get working directory: %v", err)
 	}
 
-	return filepath.Clean(filepath.Join(filepath.Dir(filename), "..", ".."))
+	for {
+		if fileExists(filepath.Join(current, "go.mod")) {
+			return current
+		}
+
+		parent := filepath.Dir(current)
+		if parent == current {
+			t.Fatal("go.mod was not found")
+		}
+		current = parent
+	}
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
+
+func binaryName() string {
+	if runtime.GOOS == "windows" {
+		return "main.exe"
+	}
+
+	return "main"
 }
