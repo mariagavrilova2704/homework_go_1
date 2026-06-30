@@ -34,3 +34,4 @@ coverage.out
 # Editor/IDE
  .idea/
  .vscode/
+/.idea
