@@ -1,6 +1,7 @@
 package homework
 
 // BuildGreeting возвращает приветствие для ученика.
+// "Привет, {name}! Добро пожаловать в Go."
 func BuildGreeting(name string) string {
 	// TODO: реализуйте функцию.
 	return ""
@@ -19,6 +20,7 @@ func CalculateTotal(price int, count int) int {
 }
 
 // FormatCourseProgress возвращает строку прогресса по курсу.
+// "Пройдено {completedLessons} из {totalLessons} уроков"
 func FormatCourseProgress(completedLessons int, totalLessons int) string {
 	// TODO: реализуйте функцию.
 	return ""
