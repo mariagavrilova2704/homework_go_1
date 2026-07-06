@@ -1,12 +1,13 @@
 package homework
 
+import "fmt"
+
 // BuildGreeting возвращает приветствие для ученика.
 //
 // Ожидаемый формат:
 // "Привет, {name}! Добро пожаловать в Go."
 func BuildGreeting(name string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
-	return ""
+	return fmt.Sprintf("Привет, %s! Добро пожаловать в Go.", name)
 }
 
 // BuildCourseWelcome возвращает название курса.
@@ -14,8 +15,7 @@ func BuildGreeting(name string) string {
 // Ожидаемый формат:
 // "Курс: {courseName}"
 func BuildCourseWelcome(courseName string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
-	return ""
+	return fmt.Sprintf("Курс: %s", courseName)
 }
 
 // BuildLessonTitle возвращает название первого урока.
@@ -23,8 +23,7 @@ func BuildCourseWelcome(courseName string) string {
 // Ожидаемый формат:
 // "Урок 1: {lessonName}"
 func BuildLessonTitle(lessonName string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
-	return ""
+	return fmt.Sprintf("Урок 1: %s", lessonName)
 }
 
 // BuildRepositoryPath возвращает путь до репозитория на GitHub.
@@ -32,8 +31,7 @@ func BuildLessonTitle(lessonName string) string {
 // Ожидаемый формат:
 // "github.com/{owner}/{repo}"
 func BuildRepositoryPath(owner string, repo string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
-	return ""
+	return fmt.Sprintf("github.com/%s/%s", owner, repo)
 }
 
 // BuildRunCommand возвращает команду запуска Go-программы.
@@ -41,6 +39,5 @@ func BuildRepositoryPath(owner string, repo string) string {
 // Ожидаемый формат:
 // "go run {packagePath}"
 func BuildRunCommand(packagePath string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
-	return ""
+	return fmt.Sprintf("go run %s", packagePath)
 }
