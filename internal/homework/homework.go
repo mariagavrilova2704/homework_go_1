@@ -7,7 +7,6 @@ import "fmt"
 // Ожидаемый формат:
 // "Привет, {name}! Добро пожаловать в Go."
 func BuildGreeting(name string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
 	return fmt.Sprintf("Привет, %s! Добро пожаловать в Go.", name)
 }
 
@@ -16,7 +15,6 @@ func BuildGreeting(name string) string {
 // Ожидаемый формат:
 // "Курс: {courseName}"
 func BuildCourseWelcome(courseName string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
 	return fmt.Sprintf("Курс: %s", courseName)
 }
 
@@ -25,7 +23,6 @@ func BuildCourseWelcome(courseName string) string {
 // Ожидаемый формат:
 // "Урок 1: {lessonName}"
 func BuildLessonTitle(lessonName string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
 	return fmt.Sprintf("Урок 1: %s", lessonName)
 }
 
@@ -34,7 +31,6 @@ func BuildLessonTitle(lessonName string) string {
 // Ожидаемый формат:
 // "github.com/{owner}/{repo}"
 func BuildRepositoryPath(owner string, repo string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
 	return fmt.Sprintf("github.com/%s/%s", owner, repo)
 }
 
@@ -43,6 +39,5 @@ func BuildRepositoryPath(owner string, repo string) string {
 // Ожидаемый формат:
 // "go run {packagePath}"
 func BuildRunCommand(packagePath string) string {
-	// TODO: реализуйте функцию через fmt.Sprintf.
 	return fmt.Sprintf("go run %s", packagePath)
 }
